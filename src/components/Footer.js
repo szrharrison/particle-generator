@@ -1,6 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
+import { getNumberOfParticles } from '../selectors'
+
 function Footer(props) {
   return (
     <div className='footer'>
@@ -9,6 +11,6 @@ function Footer(props) {
   )
 }
 
-const mapStateToProps = state => ({particles: state.particles.all.length})
+const mapStateToProps = state => ({particles: getNumberOfParticles(state)})
 
 export default connect(mapStateToProps)(Footer)

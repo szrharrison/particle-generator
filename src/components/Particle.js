@@ -1,11 +1,22 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
+import { getParticle } from '../selectors'
+
 function Particle(props) {
-  console.log(props)
   return (
-    <circle cx={props.x} cy={props.y} r="2" />
+    <circle cx={props.x} cy={props.y} r="2"/>
   )
 }
 
-export default connect()(Particle)
+function makeMapStateToProps() {
+  return (state, props) => {
+    const {x, y} = getParticle(state, props)
+    return {
+      x,
+      y
+    }
+  }
+}
+
+export default connect(makeMapStateToProps)(Particle)

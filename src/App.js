@@ -4,9 +4,10 @@ import * as d3 from 'd3'
 
 import './App.css'
 
-import { tickTime, startTicker } from './actions/tickerActions'
+import { tickTime, startTicker, stopTicker } from './actions/tickerActions'
 import { startParticles, stopParticles, maybeCreateParticles } from './actions/particlesActions'
 import { updateMousePos } from './actions/mouseActions'
+import { getNumberOfParticles } from './selectors'
 
 import Particles from './components/Particles'
 import Header from './components/Header'
@@ -24,18 +25,29 @@ class App extends Component {
     let svg = d3.select(this.refs.svg)
 
     svg.on('mousedown', () => {
+      this.startTicker()
       this.updateMousePos()
       this.props.startParticles()
     })
     svg.on('touchstart', () => {
+      this.startTicker()
       this.updateTouchPos()
       this.props.startParticles()
     })
     svg.on('mousemove', this.updateMousePos)
     svg.on('touchmove', this.updateTouchPos)
-    svg.on('mouseup', this.props.stopParticles)
-    svg.on('touchend', this.props.stopParticles)
-    svg.on('mouseleave', this.props.stopParticles)
+    svg.on('mouseup', () => {
+      this.props.stopParticles()
+      this.props.stopTicker()
+    })
+    svg.on('touchend', () => {
+      this.props.stopParticles()
+      this.props.stopTicker()
+    })
+    svg.on('mouseleave', () => {
+      this.props.stopParticles()
+      this.props.stopTicker()
+    })
   }
 
   updateMousePos() {
@@ -52,6 +64,8 @@ class App extends Component {
     const ticker = () => {
       if(this.props.tickerStarted) {
         this.props.maybeCreateParticles()
+      }
+      if(this.props.particleNumber > 0) {
         this.props.tickTime()
       }
 
@@ -59,7 +73,6 @@ class App extends Component {
     }
 
     if(!this.props.tickerStarted) {
-      console.log("Starting ticker")
       this.props.startTicker()
       ticker()
     }
@@ -68,7 +81,6 @@ class App extends Component {
   render() {
     return (
       <div
-        onMouseDown={this.startTicker.bind(this)}
         style={{overflow: 'hidden'}}
       >
         <Header/>
@@ -90,12 +102,14 @@ function mapStateToProps(state) {
   return {
     tickerStarted: state.ticker.started,
     svgWidth: state.svg.width,
-    svgHeight: state.svg.height
+    svgHeight: state.svg.height,
+    particleNumber: getNumberOfParticles(state)
   }
 }
 export default connect(mapStateToProps, {
   tickTime,
   startTicker,
+  stopTicker,
   startParticles,
   stopParticles,
   updateMousePos,

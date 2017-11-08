@@ -3,13 +3,14 @@ import { connect } from 'react-redux'
 
 import Particle from './Particle'
 
-function Particles({particles}) {
-  const l = particles.length,
+function Particles({particleIds}) {
+  const l = particleIds.length,
         particleArray = new Array(l)
   for(let i = 0; i < l; i++) {
     particleArray[i] = (
       <Particle
-        {...particles[i]}
+        key={particleIds[i]}
+        id={particleIds[i]}
       />
     )
   }
@@ -20,6 +21,6 @@ function Particles({particles}) {
   )
 }
 
-const mapStateToProps = state => ({particles: state.particles.all})
+const mapStateToProps = state => ({particleIds: state.particles.allIds})
 
 export default connect(mapStateToProps)(Particles)

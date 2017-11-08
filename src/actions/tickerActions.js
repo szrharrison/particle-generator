@@ -17,3 +17,20 @@ export function startTicker() {
     type: 'ticker.START_TICKER'
   }
 }
+
+export function stopTicker() {
+  return function stopTicker(dispatch, getState) {
+    function waitUntilNoParticles() {
+      const particleNumber = getState().particles.allIds.length
+      if(particleNumber > 0) {
+        setTimeout(waitUntilNoParticles, 50)
+      } else {
+        dispatch({
+          type: 'ticker.STOP_TICKER'
+        })
+      }
+    }
+
+    waitUntilNoParticles()
+  }
+}
