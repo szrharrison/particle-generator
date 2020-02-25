@@ -21,7 +21,7 @@ export function startTicker() {
 export function stopTicker() {
   return function stopTicker(dispatch, getState) {
     function waitUntilNoParticles() {
-      const particleNumber = getState().particles.allIds.length
+      const particleNumber = getState().svgParticles.allIds.length + getState().canvasParticles.allIds.length
       if(particleNumber > 0) {
         setTimeout(waitUntilNoParticles, 50)
       } else {

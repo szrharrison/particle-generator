@@ -1,13 +1,16 @@
 import { combineReducers } from 'redux'
 
-import particleReducers from './particleReducers'
+import { svgParticleReducers, canvasParticleReducers } from './particleReducers'
 import tickerReducers from './tickerReducers'
 import mouseReducers from './mouseReducers'
 import svgReducers from './svgReducers'
+import canvasReducers from './canvasReducers'
 
 export default combineReducers({
-  particles: particleReducers,
+  svgParticles: svgParticleReducers,
+  canvasParticles: canvasParticleReducers,
   ticker: tickerReducers,
   mouse: mouseReducers,
-  svg: svgReducers
+  svg: svgReducers,
+  canvas: canvasReducers
 })

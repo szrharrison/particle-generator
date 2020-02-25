@@ -3,8 +3,7 @@ import { randomNormal as d3RandomNormal } from 'd3'
 import createReducer from './utilities'
 
 const G = 0.3, // Gravity
-      randNormal = d3RandomNormal(1, 2),
-      randNormal2 = d3RandomNormal(0.5, 1.8)
+      randNormal = d3RandomNormal(0.1, 1)  // possible x velocities
 
 const initialState = {
   all: {},
@@ -18,7 +17,8 @@ const initialState = {
 const startParticles = state => ({...state, particlesStarted: true})
 const stopParticles = state => ({...state, particlesStarted: false})
 const createParticles = (state, action) => {
-  const {x, y, N} = action,
+  const {x, y} = action,
+        N = state.rate,
         newParticles = {},
         newParticleIds = new Array(N)
 
@@ -30,7 +30,7 @@ const createParticles = (state, action) => {
 
     particle.vector = [
       particle.id % 2 ? -randNormal() : randNormal(), // X-Velocity
-      -randNormal2() * 3                              // Y-Velocity
+      -randNormal()                                   // Y-Velocity
     ]
 
     newParticles[particle.id] = particle
@@ -85,4 +85,5 @@ handlers.set('particles.START_PARTICLES', startParticles)
         .set('particles.CREATE_PARTICLES', createParticles)
         .set('ticker.TICK_TIME', moveParticles)
 
-export default createReducer(initialState, handlers)
+export const svgParticleReducers = createReducer(initialState, handlers)
+export const canvasParticleReducers = createReducer(initialState, handlers)

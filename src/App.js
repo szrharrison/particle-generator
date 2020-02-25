@@ -5,11 +5,12 @@ import * as d3 from 'd3'
 import './App.css'
 
 import { tickTime, startTicker, stopTicker } from './actions/tickerActions'
-import { startParticles, stopParticles, maybeCreateParticles } from './actions/particlesActions'
+import { startParticles, stopParticles, maybeCreateSvgParticles } from './actions/particlesActions'
 import { updateMousePos } from './actions/mouseActions'
-import { getNumberOfParticles } from './selectors'
+import { hasParticles } from './selectors'
 
-import Particles from './components/Particles'
+import SvgParticles from './components/SvgParticles'
+import CanvasParticles from './components/CanvasParticles'
 import Header from './components/Header'
 import Footer from './components/Footer'
 
@@ -22,7 +23,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    let svg = d3.select(this.refs.svg)
+    const svg = d3.select(this.refs.svg)
 
     svg.on('mousedown', () => {
       this.startTicker()
@@ -63,9 +64,9 @@ class App extends Component {
   startTicker() {
     const ticker = () => {
       if(this.props.tickerStarted) {
-        this.props.maybeCreateParticles()
+        this.props.maybeCreateSvgParticles()
       }
-      if(this.props.particleNumber > 0) {
+      if(this.props.hasParticles) {
         this.props.tickTime()
       }
 
@@ -90,8 +91,14 @@ class App extends Component {
           ref="svg"
           style={{background: 'rgba(124, 224, 249, .3)'}}
         >
-          <Particles/>
+          <SvgParticles/>
         </svg>
+        <canvas
+          width={this.props.canvasWidth}
+          height={this.props.canvasHeight}
+        >
+          <CanvasParticles/>
+        </canvas>
         <Footer/>
       </div>
     )
@@ -103,7 +110,9 @@ function mapStateToProps(state) {
     tickerStarted: state.ticker.started,
     svgWidth: state.svg.width,
     svgHeight: state.svg.height,
-    particleNumber: getNumberOfParticles(state)
+    canvasWidth: state.canvas.width,
+    canvasHeight: state.canvas.height,
+    hasParticles: hasParticles(state)
   }
 }
 export default connect(mapStateToProps, {
@@ -113,5 +122,5 @@ export default connect(mapStateToProps, {
   startParticles,
   stopParticles,
   updateMousePos,
-  maybeCreateParticles
+  maybeCreateSvgParticles
 })(App)

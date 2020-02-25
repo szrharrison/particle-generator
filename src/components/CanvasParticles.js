@@ -1,14 +1,14 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import Particle from './Particle'
+import CanvasParticle from './CanvasParticle'
 
-function Particles({particleIds}) {
+function CanvasParticles({particleIds}) {
   const l = particleIds.length,
         particleArray = new Array(l)
   for(let i = 0; i < l; i++) {
     particleArray[i] = (
-      <Particle
+      <CanvasParticle
         key={particleIds[i]}
         id={particleIds[i]}
       />
@@ -21,6 +21,6 @@ function Particles({particleIds}) {
   )
 }
 
-const mapStateToProps = state => ({particleIds: state.particles.allIds})
+const mapStateToProps = state => ({particleIds: state.canvasParticles.allIds})
 
-export default connect(mapStateToProps)(Particles)
+export default connect(mapStateToProps)(CanvasParticles)

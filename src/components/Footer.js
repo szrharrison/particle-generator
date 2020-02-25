@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { getNumberOfParticles } from '../selectors'
+import { getNumberOfSvgParticles } from '../selectors'
 
 function Footer(props) {
   return (
@@ -11,6 +11,6 @@ function Footer(props) {
   )
 }
 
-const mapStateToProps = state => ({particles: getNumberOfParticles(state)})
+const mapStateToProps = state => ({particles: getNumberOfSvgParticles(state)})
 
 export default connect(mapStateToProps)(Footer)

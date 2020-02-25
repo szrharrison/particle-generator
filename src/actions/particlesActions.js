@@ -7,13 +7,13 @@ export function createParticles(x, y, N) {
   }
 }
 
-export function maybeCreateParticles() {
+export function maybeCreateSvgParticles() {
   return (dispatch, getState) => {
     const [x, y] = getState().mouse.position,
-          {rate: N, particlesStarted: started} = getState().particles
+          {particlesStarted} = getState().svgParticles
 
-    if(started) {
-      dispatch(createParticles(x, y, N))
+    if(particlesStarted) {
+      dispatch(createParticles(x, y))
     }
   }
 }
